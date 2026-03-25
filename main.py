@@ -1,6 +1,10 @@
 import os
+import sys
 
-from colorist import BgColorRGB, Color, ColorRGB, Effect
+
+if 'idlelib' in sys.modules:
+    print("Sorry, this program is not compatible with python IDLE, as it does not implement standard terminal features and does not allow for text coloring. Please run this application in a terminal with the command 'python3 PATH-TO-MAIN.PY' ")
+    exit()
 
 
 def clear():
@@ -10,22 +14,40 @@ def clear():
         os.system("clear")
 
 
+try:
+    from colorist import BgColorRGB, Color, ColorRGB, Effect, effect_blink
+except ImportError:
+    clear()
+    print("\n Dependencies are not installed, please run 'pip install colorist'")
+    exit()
+
+
 marioRed = BgColorRGB(238, 28, 37)
+erroryellow = BgColorRGB(255, 219, 60)
 
-clear()
+stepone = True
+steponePrintlog = ""
 
-print(
-    f"Welcome to {Color.WHITE}{marioRed}Mushroom Cafe{marioRed.OFF}{Color.OFF} Payroll Management \n \n"
-)
+while stepone:
+    clear()
 
+    if steponePrintlog:
+        print(steponePrintlog)
 
-print("Select task:")
-print(f"{Effect.BOLD}1{Effect.OFF}. Enter hours worked")
-print(f"{Effect.BOLD}2{Effect.OFF}. Manage employees")
-print(f"{Effect.BOLD}3{Effect.OFF}. Export payroll slips")
-print(f"{Effect.BOLD}4{Effect.OFF}. View statistics in detail \n")
-taskNumber = int(input("Enter the number of the task you would like to do: "))
+    print(
+        f"\nWelcome to {Color.WHITE}{marioRed}Mushroom Cafe{marioRed.OFF}{Color.OFF} Payroll Management \n \n"
+    )
 
-clear()
+    print("Select task:")
+    print(f"{Effect.BOLD}1{Effect.OFF}. Enter hours worked")
+    print(f"{Effect.BOLD}2{Effect.OFF}. Manage employees")
+    print(f"{Effect.BOLD}3{Effect.OFF}. Export payroll slips")
+    print(f"{Effect.BOLD}4{Effect.OFF}. View statistics \n")
 
-taskNumber = int(input("Enter the number of the task you would like to do: "))
+    try:
+        taskNumber = int(input("Enter the number of the task you would like to do: "))
+    except ValueError:
+        steponePrintlog = f"{Effect.BOLD}{Color.WHITE}{erroryellow}Please enter a number between 1 and 4{erroryellow.OFF}{Color.OFF}{Effect.OFF} \n"
+        continue
+
+    clear()
