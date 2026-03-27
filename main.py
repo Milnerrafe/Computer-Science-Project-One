@@ -22,6 +22,7 @@ while stepone:
 
     if steponePrintlog:
         color.output(steponePrintlog)
+        steponePrintlog = ""
     else:
         color.output("\n")
 

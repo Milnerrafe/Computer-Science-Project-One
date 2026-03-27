@@ -37,13 +37,15 @@ class color:
             cls.ostype = 2
 
         if cls.ostype == 1:
+            string = "".join(string.splitlines())
+
             styleTable = {
-                "error": ("shell_connect.write('", "', 'COMMENT')"),
-                "warning": ("shell_connect.write('", "', 'KEYWORD')"),
-                "success": ("shell_connect.write('", "', 'STRING')"),
-                "information": ("shell_connect.write('", "', 'stdout')"),
-                "important": ("shell_connect.write('", "', 'BUILTIN')"),
-                "bold": ("shell_connect.write('", "', 'SYNC')"),
+                "error": ("shell_connect.write('''", "''', 'COMMENT')"),
+                "warning": ("shell_connect.write('''", "''', 'KEYWORD')"),
+                "success": ("shell_connect.write('''", "''', 'STRING')"),
+                "information": ("shell_connect.write('''", "''', 'stdout')"),
+                "important": ("shell_connect.write('''", "''', 'BUILTIN')"),
+                "bold": ("shell_connect.write('''", "''', 'SYNC')"),
             }
 
             pattern = r"\*/(error|warning|success|information|important|context|bold)(?::(OFF))?/\*"
