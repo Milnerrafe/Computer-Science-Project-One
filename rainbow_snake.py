@@ -37,15 +37,15 @@ class color:
             cls.ostype = 2
 
         if cls.ostype == 1:
-            string = "".join(string.splitlines())
+            string = string.replace("\n", "{color.newline()}")
 
             styleTable = {
-                "error": ("shell_connect.write('''", "''', 'COMMENT')"),
-                "warning": ("shell_connect.write('''", "''', 'KEYWORD')"),
-                "success": ("shell_connect.write('''", "''', 'STRING')"),
-                "information": ("shell_connect.write('''", "''', 'stdout')"),
-                "important": ("shell_connect.write('''", "''', 'BUILTIN')"),
-                "bold": ("shell_connect.write('''", "''', 'SYNC')"),
+                "error": ("shell_connect.write(f'''", "''', 'COMMENT')"),
+                "warning": ("shell_connect.write(f'''", "''', 'KEYWORD')"),
+                "success": ("shell_connect.write(f'''", "''', 'STRING')"),
+                "information": ("shell_connect.write(f'''", "''', 'stdout')"),
+                "important": ("shell_connect.write(f'''", "''', 'BUILTIN')"),
+                "bold": ("shell_connect.write(f'''", "''', 'SYNC')"),
             }
 
             pattern = r"\*/(error|warning|success|information|important|context|bold)(?::(OFF))?/\*"
@@ -64,7 +64,7 @@ class color:
 
             result = re.sub(pattern, replOStypeone, string)
 
-            patterntwo = r"(shell_connect\.write\([^)]*\))"
+            patterntwo = r"(shell_connect\.write\((?:[^()]*|\([^()]*\))*\))"
 
             parts = re.split(patterntwo, result)
 
@@ -74,7 +74,7 @@ class color:
                 if re.match(patterntwo, part):
                     output.append(part)
                 else:
-                    output.append(f"shell_connect.write('{part}', 'stdout')")
+                    output.append(f"shell_connect.write(f'''{part}''', 'stdout')")
 
             result = "\n".join(output)
 
@@ -85,7 +85,7 @@ class color:
         elif cls.ostype == 2:
             styleTable = {
                 "error": "\x1b[1m\x1b[38;2;255;255;255m\x1b[48;2;255;60;60m",
-                "warning": "\x1b[1m\x1b[38;2;255;255;255m\x1b[48;2;255;219;60m",
+                "warning": "\x1b[1m\x1b[38;2;0;0;0m\x1b[48;2;255;219;60m",
                 "success": "\x1b[1m\x1b[38;2;255;255;255m\x1b[48;2;57;226;0m",
                 "information": "\x1b[1m\x1b[38;2;255;255;255m\x1b[48;2;60;135;255m",
                 "important": "\x1b[1m\x1b[38;2;255;255;255m\x1b[48;2;255;60;209m",
@@ -253,3 +253,7 @@ class color:
             raise Exception("Rainbow-Snake does not support your os or interpreter")
         else:
             raise Exception("Rainbow-Snake does not support your os or interpreter")
+
+    @classmethod
+    def newline(cls):
+        return "\n"
