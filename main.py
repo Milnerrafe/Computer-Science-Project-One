@@ -1,9 +1,10 @@
 import os
 import sys
 
-
-if 'idlelib' in sys.modules:
-    print("Sorry, this program is not compatible with python IDLE, as it does not implement standard terminal features and does not allow for text coloring. Please run this application in a terminal with the command 'python3 PATH-TO-MAIN.PY' ")
+if "idlelib" in sys.modules:
+    print(
+        "Sorry, this program is not compatible with python IDLE, as it does not implement standard terminal features and does not allow for text coloring. Please run this application in a terminal with the command 'python3 PATH-TO-MAIN.PY' "
+    )
     exit()
 
 
