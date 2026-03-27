@@ -3,48 +3,48 @@ import sys
 
 from rainbow_snake import color
 
-
-def clear():
-    if os.name == "nt":
-        os.system("cls")
-    else:
-        os.system("clear")
-
-
-try:
-    from colorist import BgColorRGB, Color, ColorRGB, Effect, effect_blink
-except ImportError:
-    clear()
-    print("\n Dependencies are not installed, please run 'pip install colorist'")
-    exit()
-
-
-marioRed = BgColorRGB(238, 28, 37)
-erroryellow = BgColorRGB(255, 219, 60)
-
 stepone = True
 steponePrintlog = ""
 
 while stepone:
-    clear()
+    color.clear()
+    color.clear()
 
-    if steponePrintlog:
-        print(steponePrintlog)
-
-    print(
-        f"\nWelcome to {Color.WHITE}{marioRed}Mushroom Cafe{marioRed.OFF}{Color.OFF} Payroll Management \n \n"
+    color.output(
+        f"\nWelcome to {color.bold + color.hexbg('#EE1C25') + color.hextext('#ffffff')}Mushroom Cafe{color.hexOFF + color.boldOFF} Payroll Management \n \n"
     )
 
-    print("Select task:")
-    print(f"{Effect.BOLD}1{Effect.OFF}. Enter hours worked")
-    print(f"{Effect.BOLD}2{Effect.OFF}. Manage employees")
-    print(f"{Effect.BOLD}3{Effect.OFF}. Export payroll slips")
-    print(f"{Effect.BOLD}4{Effect.OFF}. View statistics \n")
+    color.output("Select task:")
+    color.output(f"{color.bold}1{color.boldOFF}. Enter hours worked")
+    color.output(f"{color.bold}2{color.boldOFF}. Manage employees")
+    color.output(f"{color.bold}3{color.boldOFF}. Export payroll slips")
+    color.output(f"{color.bold}4{color.boldOFF}. View statistics \n")
+
+    if steponePrintlog:
+        color.output(steponePrintlog)
+    else:
+        color.output("\n")
 
     try:
-        taskNumber = int(input("Enter the number of the task you would like to do: "))
-    except ValueError:
-        steponePrintlog = f"{Effect.BOLD}{Color.WHITE}{erroryellow}Please enter a number between 1 and 4{erroryellow.OFF}{Color.OFF}{Effect.OFF} \n"
+        taskInput = input("Enter the number of the task you would like to do: ")
+    except KeyboardInterrupt:
+        steponePrintlog = f"{color.warning}Please enter 'exit' to exit to allow the program to properly shut down.{color.warningOFF} \n"
         continue
 
-    clear()
+    if taskInput == "exit":
+        exit()
+    else:
+        try:
+            taskNumber = int(taskInput)
+        except ValueError:
+            steponePrintlog = f"{color.warning}Please enter a number between 1 and 4{color.warningOFF} \n"
+            continue
+
+        if taskNumber < 1 or taskNumber > 4:
+            steponePrintlog = f"{color.warning}Please enter a number between 1 and 4{color.warningOFF} \n"
+            continue
+        else:
+            stepone = False
+
+    color.clear()
+    color.clear()
