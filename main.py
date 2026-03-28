@@ -27,7 +27,7 @@ while stepone:
         color.output("\n")
 
     try:
-        taskInput = input("Enter the number of the task you would like to do: ")
+        taskInput = color.input("Enter the number of the task you would like to do: ")
     except KeyboardInterrupt:
         steponePrintlog = f"{color.warning}Please enter 'exit' to exit to allow the program to properly shut down.{color.warningOFF} \n"
         continue
