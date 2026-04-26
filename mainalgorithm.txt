@@ -1,103 +1,89 @@
-shouldExit = FALSE
+FUNCTION Main
+    shouldExit = FALSE
 
-WHILE shouldExit is FALSE
-   showStartpage  = TRUE
-   functionNumber = NONE
-   errorMessagevariable = “”
+    WHILE shouldExit is FALSE
+        showStartpage  = TRUE
+        functionNumber = NONE
+        errorMessagevariable = “”
 
-   WHILE showStartpage 
-        CLEAROUTPUT()
-        OUTPUT(“
-                     Welcome to /BOLD + RED/  Mushroom Cafe  /OFF/ Payroll Management
+        WHILE showStartpage
+                CLEAROUTPUT()
+                OUTPUT(“
+                            Welcome to /BOLD + RED/  Mushroom Cafe  /OFF/ Payroll Management
 
-                     Select task:
-                     /BOLD/ 1 /OFF/. Use Wizard
-                     /BOLD/ 2 /OFF/. Enter hours worked
-                     /BOLD/ 3 /OFF/. View Employee Pay
-                     /BOLD/ 4 /OFF/. View Employee statistics
-    
-        ”)
-        
-        IF errorMessagevariable THEN
-            OUTPUT(errorMessagevariable)
-            errorMessagevariable = “”
-        END IF
+                            Select task:
+                            /BOLD/ 1 /OFF/. Use Wizard
+                            /BOLD/ 2 /OFF/. Enter hours worked
+                            /BOLD/ 3 /OFF/. View Employee Pay
+                            /BOLD/ 4 /OFF/. View Employee statistics
 
-        taskInput = INPUT(“Enter the number of the task you would like to do:”)
-            CATCH KeyboardInterrupt
-                errorMessagevariable = “ /WARNING/ Please enter 'exit' to exit to allow the program to properly shut down.  /OFF/”
-                SKIP_TO_NEXT_LOOP_ITERATION
-            END CATCH
+                ”)
 
-        IF taskInput == “exit”
-            EXIT
-        ELSE
-            taskNumber = int(taskInput)
-                     CATCH ValueError
-                          errorMessagevariable = “ /WARNING/ Please enter a number between 1 and 4 /OFF/”
-                          SKIP_TO_NEXT_LOOP_ITERATION
+                IF errorMessagevariable THEN
+                    OUTPUT(errorMessagevariable)
+                    errorMessagevariable = “”
+                END IF
+
+                taskInput = INPUT(“Enter the number of the task you would like to do:”)
+                    CATCH KeyboardInterrupt
+                        errorMessagevariable = “ /WARNING/ Please enter 'exit' to exit to allow the program to properly shut down.  /OFF/”
+                        SKIP_TO_NEXT_LOOP_ITERATION
                     END CATCH
-            IF taskNumber < 1 or taskNumber > 4
-                          errorMessagevariable = “ /WARNING/ Please enter a number between 1 and 4 /OFF/”
-                          SKIP_TO_NEXT_LOOP_ITERATION
-            ELSE	
-                stepone = FALSE
-                functionNumber = taskNumber
+
+                IF taskInput == “exit”
+                    EXIT
+                ELSE
+                    taskNumber = int(taskInput)
+                            CATCH ValueError
+                                errorMessagevariable = “ /WARNING/ Please enter a number between 1 and 4 /OFF/”
+                                SKIP_TO_NEXT_LOOP_ITERATION
+                            END CATCH
+                    IF taskNumber < 1 or taskNumber > 4
+                                errorMessagevariable = “ /WARNING/ Please enter a number between 1 and 4 /OFF/”
+                                SKIP_TO_NEXT_LOOP_ITERATION
+                    ELSE
+                        stepone = FALSE
+                        functionNumber = taskNumber
+                    END IF
+                END IF
+
+                CLEAROUTPUT()
+
+            END WHILE
+
+            IF functionNumber
+                MATCH functionNumber
+
+                    CASE 1:
+                        goWhere = function1("1")
+
+                        IF goWhere == "back" THEN functionNumber = NONE
+                        IF goWhere == "exit" THEN shouldExit = TRUE
+                    END CASE
+
+                    CASE 2:
+                        goWhere = function1("2")
+
+                        IF goWhere == "back" THEN functionNumber = NONE
+                        IF goWhere == "exit" THEN shouldExit = TRUE
+                    END CASE
+
+                    CASE 3:
+                        goWhere = function1("3")
+
+                        IF goWhere == "back" THEN functionNumber = NONE
+                        IF goWhere == "exit" THEN shouldExit = TRUE
+                    END CASE
+
+                    CASE 4:
+                        goWhere = function1("4")
+
+                        IF goWhere == "back" THEN functionNumber = NONE
+                        IF goWhere == "exit" THEN shouldExit = TRUE
+                    END CASE
+
+                END MATCH
             END IF
-        END IF
-        
-        CLEAROUTPUT()
-    
+
     END WHILE
-        
-    IF functionNumber
-        MATCH functionNumber
-                
-            CASE 1:
-                goWhere = function1("1")
-                    
-                IF goWhere == "back" THEN functionNumber = NONE
-                IF goWhere == "exit" THEN shouldExit = TRUE
-            END CASE
-                
-            CASE 2:
-                goWhere = function1("2")
-                    
-                IF goWhere == "back" THEN functionNumber = NONE
-                IF goWhere == "exit" THEN shouldExit = TRUE
-            END CASE
-                
-            CASE 3:
-                goWhere = function1("3")
-                    
-                IF goWhere == "back" THEN functionNumber = NONE
-                IF goWhere == "exit" THEN shouldExit = TRUE
-            END CASE
-                
-            CASE 4:
-                goWhere = function1("4")
-                    
-                IF goWhere == "back" THEN functionNumber = NONE
-                IF goWhere == "exit" THEN shouldExit = TRUE
-            END CASE
-                
-        END MATCH
-    END IF
-    
-END WHILE
-                    
-                    
-                    
-                
-
-
-
-
-
-    
-
-
-
-   
-
-
+END Main
