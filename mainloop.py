@@ -1,6 +1,3 @@
-import os
-import sys
-
 from rainbowsnake import Color
 
 
@@ -10,6 +7,16 @@ def function1(number):
 
 
 def function2(number):
+    print(number)
+    return "back"
+
+
+def function3(number):
+    print(number)
+    return "back"
+
+
+def function4(number):
     print(number)
     return "back"
 
@@ -94,6 +101,3 @@ def mainloop():
 
                     functionNumber = None if goWhere == "back" else None
                     shouldExit = True if goWhere == "exit" else None
-
-
-mainloop()
