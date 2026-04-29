@@ -3,6 +3,17 @@ import sys
 
 from rainbowsnake import Color
 
+employeesData = [
+    ["Rafe Milner", "Manager", [1, 3, 9, 10, 11, 2, 1]],
+    ["I can't do that, Hater", "Barista", [6, 7, 5, 8, 9, 4, 6]],
+    ["Somepeople", "Barista", [7, 8, 3, 2, 4, 7, 0]],
+    ["Best Friend", "Cleaner", [7, 8, 3, 2, 4, 7, 0]],
+]
+
+name = 0
+position = 1
+days = 2
+
 
 def function1(number):
     print(number)
@@ -12,6 +23,55 @@ def function1(number):
 def function2(number):
     print(number)
     return "back"
+
+
+def function5(number):
+    def center(string, type):
+        match type:
+            case "number":
+                text = str(string)
+                return text.center(14)
+            case "name":
+                bigest = 0
+                for employee in employeesData:
+                    if len(str(employee[name])) > bigest:
+                        bigest = len(str(employee[name]))
+
+                text = str(string)
+                return text.center(bigest + 6)
+
+            case "position":
+                bigest = 0
+                for employee in employeesData:
+                    if len(str(employee[position])) > bigest:
+                        bigest = len(str(employee[position]))
+
+                text = str(string)
+                return text.center(bigest + 8)
+
+    Color.output(
+        f"{Color.bold + Color.hexbg('#000000') + Color.hextext('#ffffff')}Manage employees:{Color.hexOFF + Color.boldOFF} \n  "
+    )
+
+    starttext = f"|{Color.bold}{center('Number', 'number')}{Color.boldOFF}|{Color.bold}{center('Name', 'name')}{Color.boldOFF}|{Color.bold}{center('Position', 'position')}{Color.boldOFF}|"
+    starttextforlen = (
+        f"|{center('Number', 'number')}|{center('Name', 'name')}|Position       |"
+    )
+
+    Color.output(starttext)
+    Color.output("-" * len(starttextforlen))
+    for index, employee in enumerate(employeesData):
+        Color.output(
+            f"|{center(index, 'number')}|{center(employee[name], 'name')}|{center(employee[position], 'position')}|"
+        )
+        Color.output("-" * len(starttextforlen))
+
+    Color.output("")
+    Color.input(
+        f"Take action, {Color.error}[d]elete employee{Color.errorOFF}, {Color.success}[a]dd employee{Color.successOFF}, {Color.warning}[e]dit employee{Color.warningOFF}: "
+    )
+
+    return "exit"
 
 
 def mainloop():
@@ -34,7 +94,8 @@ def mainloop():
             Color.output(f"{Color.bold}1{Color.boldOFF}. Use Wizard")
             Color.output(f"{Color.bold}2{Color.boldOFF}. Enter hours worked")
             Color.output(f"{Color.bold}3{Color.boldOFF}. View Employee Pay")
-            Color.output(f"{Color.bold}4{Color.boldOFF}. View Employee statistics \n")
+            Color.output(f"{Color.bold}4{Color.boldOFF}. View Employee statistics")
+            Color.output(f"{Color.bold}5{Color.boldOFF}. Manage Employees \n")
 
             if steponePrintlog:
                 Color.output(steponePrintlog)
@@ -59,7 +120,7 @@ def mainloop():
                     steponePrintlog = f"{Color.warning}Please enter a number between 1 and 4{Color.warningOFF} \n"
                     continue
 
-                if taskNumber < 1 or taskNumber > 4:
+                if taskNumber < 1 or taskNumber > 5:
                     steponePrintlog = f"{Color.warning}Please enter a number between 1 and 4{Color.warningOFF} \n"
                     continue
                 else:
@@ -91,6 +152,12 @@ def mainloop():
 
                 case 4:
                     goWhere = function4("1")
+
+                    functionNumber = None if goWhere == "back" else None
+                    shouldExit = True if goWhere == "exit" else None
+
+                case 5:
+                    goWhere = function5("1")
 
                     functionNumber = None if goWhere == "back" else None
                     shouldExit = True if goWhere == "exit" else None
