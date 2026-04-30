@@ -178,7 +178,7 @@ def function5(number):
                             errormessage = f"{Color.warning}Please enter a number or press [b] to go back{Color.warningOFF}"
                             continue
 
-                    if employeesData[delnumber]:
+                    if delnumber in range(len(employeesData)):
                         externalContinue = False
                         externalBreak = False
                         name = ""
@@ -319,7 +319,7 @@ def function5(number):
                             errormessage = f"{Color.warning}Please enter a number or press [b] to go back{Color.warningOFF}"
                             continue
 
-                    if employeesData[delnumber]:
+                    if delnumber in range(len(employeesData)):
                         externalContinue = False
                         externalBreak = False
 
