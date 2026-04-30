@@ -95,33 +95,77 @@ def function5(number):
                 text = str(string)
                 return text.center(bigest + 8)
 
-    Color.output(
-        f"{Color.bold + Color.hexbg('#000000') + Color.hextext('#ffffff')}Manage employees:{Color.hexOFF + Color.boldOFF} \n  "
-    )
+    shouldExit = False
+    action = "continue"
+    errormessage = ""
 
-    starttext = f"|{Color.bold}{center('Number', 'number')}{Color.boldOFF}|{Color.bold}{center('Name', 'name')}{Color.boldOFF}|{Color.bold}{center('Position', 'position')}{Color.boldOFF}|"
-    starttextforlen = (
-        f"|{center('Number', 'number')}|{center('Name', 'name')}|Position       |"
-    )
+    while not shouldExit:
+        Color.clear()
+        Color.clear()
+        match action.lower():
+            case "continue":
+                shouldExit = False
+                Color.output(
+                    f"{Color.bold + Color.hexbg('#000000') + Color.hextext('#ffffff')}Manage employees:{Color.hexOFF + Color.boldOFF} \n  "
+                )
 
-    Color.output(starttext)
-    Color.output("-" * len(starttextforlen))
+                starttext = f"|{Color.bold}{center('Number', 'number')}{Color.boldOFF}|{Color.bold}{center('Name', 'name')}{Color.boldOFF}|{Color.bold}{center('Position', 'position')}{Color.boldOFF}|"
+                starttextforlen = f"|{center('Number', 'number')}|{center('Name', 'name')}|Position       |"
 
-    syncdata()
-    for index, employee in enumerate(employeesData):
-        Color.output(
-            f"|{center(index, 'number')}|{center(employee['name'], 'name')}|{center(employee['position'], 'position')}|"
-        )
-        Color.output("-" * len(starttextforlen))
-    syncdata()
+                Color.output(starttext)
+                Color.output("-" * len(starttextforlen))
 
-    Color.output("")
-    Color.input(
-        f"Take action, {Color.error}[d]elete employee{Color.errorOFF}, {Color.success}[a]dd employee{Color.successOFF}, {Color.warning}[e]dit employee{Color.warningOFF}: "
-    )
+                syncdata()
+                for index, employee in enumerate(employeesData):
+                    Color.output(
+                        f"|{center(index, 'number')}|{center(employee['name'], 'name')}|{center(employee['position'], 'position')}|"
+                    )
+                    Color.output("-" * len(starttextforlen))
+                syncdata()
 
-    syncdata()
-    print(json.dumps(employeesData, indent=2))
+                Color.output(errormessage if errormessage else "\n")
+                try:
+                    action = Color.input(
+                        f"Take action, {Color.error}[d]elete employee{Color.errorOFF}, {Color.success}[a]dd employee{Color.successOFF}, {Color.warning}[e]dit employee{Color.warningOFF}, {Color.information}go [h]ome{Color.informationOFF}:"
+                    )
+                except KeyboardInterrupt:
+                    errormessage = f"{Color.warning}Please enter 'exit' to exit to allow the program to properly shut down.{Color.warningOFF} \n"
+                    continue
+
+            case "h":
+                return "back"
+
+            case "e":
+                action = "continue"
+                continue
+
+            case "d":
+                action = "continue"
+                continue
+
+            case "a":
+                action = "continue"
+
+                name = input("Enter Name")
+                position = input("Enter position")
+
+                newemployee = dict(
+                    name=name, position=position, hoursperday=[0, 0, 0, 0, 0, 0, 0]
+                )
+
+                employeesData.append(newemployee)
+
+                action = "continue"
+
+                continue
+
+            case "exit":
+                return "exit"
+
+            case _:
+                errormessage = f'{Color.warning}Please enter one of the commands below or type "exit" at anytime to quit the program.{Color.warningOFF} \n'
+                action = "continue"
+                continue
 
     return "exit"
 
@@ -169,11 +213,11 @@ def mainloop():
                 try:
                     taskNumber = int(taskInput)
                 except ValueError:
-                    steponePrintlog = f"{Color.warning}Please enter a number between 1 and 4{Color.warningOFF} \n"
+                    steponePrintlog = f"{Color.warning}Please enter a number between 1 and 5{Color.warningOFF} \n"
                     continue
 
                 if taskNumber < 1 or taskNumber > 5:
-                    steponePrintlog = f"{Color.warning}Please enter a number between 1 and 4{Color.warningOFF} \n"
+                    steponePrintlog = f"{Color.warning}Please enter a number between 1 and 5{Color.warningOFF} \n"
                     continue
                 else:
                     stepone = False
@@ -187,11 +231,15 @@ def mainloop():
                 case 1:
                     goWhere = function1("1")
 
+                    syncdata()
+
                     functionNumber = None if goWhere == "back" else None
                     shouldExit = True if goWhere == "exit" else None
 
                 case 2:
                     goWhere = function2("1")
+
+                    syncdata()
 
                     functionNumber = None if goWhere == "back" else None
                     shouldExit = True if goWhere == "exit" else None
@@ -199,17 +247,23 @@ def mainloop():
                 case 3:
                     goWhere = function3("1")
 
+                    syncdata()
+
                     functionNumber = None if goWhere == "back" else None
                     shouldExit = True if goWhere == "exit" else None
 
                 case 4:
                     goWhere = function4("1")
 
+                    syncdata()
+
                     functionNumber = None if goWhere == "back" else None
                     shouldExit = True if goWhere == "exit" else None
 
                 case 5:
                     goWhere = function5("1")
+
+                    syncdata()
 
                     functionNumber = None if goWhere == "back" else None
                     shouldExit = True if goWhere == "exit" else None
