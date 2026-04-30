@@ -1,18 +1,64 @@
+import json
 import os
 import sys
 
 from rainbowsnake import Color
 
 employeesData = [
-    ["Rafe Milner", "Manager", [1, 3, 9, 10, 11, 2, 1]],
-    ["I can't do that, Hater", "Barista", [6, 7, 5, 8, 9, 4, 6]],
-    ["Somepeople", "Barista", [7, 8, 3, 2, 4, 7, 0]],
-    ["Best Friend", "Cleaner", [7, 8, 3, 2, 4, 7, 0]],
+    {
+        "name": "Rafe Milner",
+        "position": "Manager",
+        "hoursperday": [1, 3, 9, 10, 11, 2, 1],
+    },
+    {
+        "name": "I can't do that, Hater",
+        "position": "Barista",
+        "hoursperday": [6, 7, 5, 8, 9, 4, 6],
+    },
+    {"name": "Somepeople", "position": "Barista", "hoursperday": [7, 8, 3, 2, 4, 7, 0]},
+    {
+        "name": "Best Friend",
+        "position": "Cleaner",
+        "hoursperday": [7, 8, 3, 2, 4, 7, 0],
+    },
 ]
 
-name = 0
-position = 1
-days = 2
+
+hasopenedata = False
+
+
+def syncdata():
+    global hasopenedata
+    global employeesData
+
+    import json
+
+    if not hasopenedata:
+        try:
+            with open(
+                "wage-program-data-and-settings.json", "r", encoding="utf-8"
+            ) as file:
+                data = json.load(file)
+                employeesData = data
+                hasopenedata = True
+                syncdata()
+        except FileNotFoundError:
+            data = employeesData
+
+            with open("wage-program-data-and-settings.json", "w") as file:
+                json.dump(data, file)
+    else:
+        data = employeesData
+
+        with open("wage-program-data-and-settings.json", "w") as file:
+            json.dump(data, file)
+
+        with open("wage-program-data-and-settings.json", "r", encoding="utf-8") as file:
+            data = json.load(file)
+            employeesData = data
+
+
+syncdata()
 
 
 def function1(number):
@@ -34,8 +80,8 @@ def function5(number):
             case "name":
                 bigest = 0
                 for employee in employeesData:
-                    if len(str(employee[name])) > bigest:
-                        bigest = len(str(employee[name]))
+                    if len(str(employee["name"])) > bigest:
+                        bigest = len(str(employee["name"]))
 
                 text = str(string)
                 return text.center(bigest + 6)
@@ -43,8 +89,8 @@ def function5(number):
             case "position":
                 bigest = 0
                 for employee in employeesData:
-                    if len(str(employee[position])) > bigest:
-                        bigest = len(str(employee[position]))
+                    if len(str(employee["position"])) > bigest:
+                        bigest = len(str(employee["position"]))
 
                 text = str(string)
                 return text.center(bigest + 8)
@@ -60,16 +106,22 @@ def function5(number):
 
     Color.output(starttext)
     Color.output("-" * len(starttextforlen))
+
+    syncdata()
     for index, employee in enumerate(employeesData):
         Color.output(
-            f"|{center(index, 'number')}|{center(employee[name], 'name')}|{center(employee[position], 'position')}|"
+            f"|{center(index, 'number')}|{center(employee['name'], 'name')}|{center(employee['position'], 'position')}|"
         )
         Color.output("-" * len(starttextforlen))
+    syncdata()
 
     Color.output("")
     Color.input(
         f"Take action, {Color.error}[d]elete employee{Color.errorOFF}, {Color.success}[a]dd employee{Color.successOFF}, {Color.warning}[e]dit employee{Color.warningOFF}: "
     )
+
+    syncdata()
+    print(json.dumps(employeesData, indent=2))
 
     return "exit"
 
