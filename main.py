@@ -124,6 +124,7 @@ def function5(number):
                 syncdata()
 
                 Color.output(errormessage if errormessage else "\n")
+                errormessage = ""
                 try:
                     action = Color.input(
                         f"Take action, {Color.error}[d]elete employee{Color.errorOFF}, {Color.success}[a]dd employee{Color.successOFF}, {Color.warning}[e]dit employee{Color.warningOFF}, {Color.information}go [h]ome{Color.informationOFF}:"
@@ -140,23 +141,172 @@ def function5(number):
                 continue
 
             case "d":
+                errormessage = ""
+
+                while True:
+                    Color.clear()
+                    Color.clear()
+
+                    Color.output(f"{Color.error}Delete employee:{Color.errorOFF} \n ")
+
+                    starttext = f"|{Color.bold}{center('Number', 'number')}{Color.boldOFF}|{Color.bold}{center('Name', 'name')}{Color.boldOFF}|{Color.bold}{center('Position', 'position')}{Color.boldOFF}|"
+                    starttextforlen = f"|{center('Number', 'number')}|{center('Name', 'name')}|Position       |"
+
+                    Color.output(starttext)
+                    Color.output("-" * len(starttextforlen))
+
+                    syncdata()
+                    for index, employee in enumerate(employeesData):
+                        Color.output(
+                            f"|{center(index, 'number')}|{center(employee['name'], 'name')}|{center(employee['position'], 'position')}|"
+                        )
+                        Color.output("-" * len(starttextforlen))
+                    syncdata()
+
+                    Color.output("\n")
+
+                    Color.output(errormessage + "\n" if errormessage else "\n")
+                    errormessage = ""
+
+                    delninput = Color.input(
+                        "Enter the number of the employee you wish to delete or [b]ack:  "
+                    )
+
+                    if delninput == "b":
+                        action = "continue"
+                        break
+                    else:
+                        try:
+                            delnumber = int(delninput)
+                        except ValueError:
+                            errormessage = f"{Color.warning}Please enter a number or press [b] to go back{Color.warningOFF}"
+                            continue
+
+                    if employeesData[delnumber]:
+                        externalContinue = False
+                        externalBreak = False
+
+                        while True:
+                            Color.clear()
+                            Color.clear()
+
+                            Color.output(
+                                f"{Color.error}Delete employee:{Color.errorOFF} \n "
+                            )
+
+                            starttext = f"|{Color.bold}{center('Number', 'number')}{Color.boldOFF}|{Color.bold}{center('Name', 'name')}{Color.boldOFF}|{Color.bold}{center('Position', 'position')}{Color.boldOFF}|"
+                            starttextforlen = f"|{center('Number', 'number')}|{center('Name', 'name')}|Position       |"
+
+                            Color.output(starttext)
+                            Color.output("-" * len(starttextforlen))
+
+                            syncdata()
+                            for index, employee in enumerate(employeesData):
+                                if index == delnumber:
+                                    Color.output(
+                                        f"{Color.error}|{center(index, 'number')}|{center(employee['name'], 'name')}|{center(employee['position'], 'position')}|{Color.errorOFF}"
+                                    )
+                                else:
+                                    Color.output(
+                                        f"|{center(index, 'number')}|{center(employee['name'], 'name')}|{center(employee['position'], 'position')}|"
+                                    )
+                                Color.output("-" * len(starttextforlen))
+                            syncdata()
+
+                            Color.output(errormessage + "\n" if errormessage else "\n")
+                            errormessage = ""
+
+                            confirm = Color.input(
+                                f"Are you sure you want to delete, {Color.error}{employeesData[delnumber]['name']}{Color.errorOFF}; [Y]es, [N]o:  "
+                            )
+
+                            if confirm.lower() == "y":
+                                del employeesData[delnumber]
+                                syncdata()
+                                externalBreak = True
+                                break
+                            elif confirm.lower() == "n":
+                                externalContinue = True
+                                break
+                            else:
+                                errormessage = f"{Color.warning}Please select yes or no{Color.warningOFF}"
+                                continue
+
+                        if externalContinue:
+                            continue
+                        if externalBreak:
+                            action = "continue"
+                            break
+
+                    else:
+                        errormessage = f"{Color.warning}Please enter an employee number from the list{Color.warningOFF}"
+
                 action = "continue"
                 continue
 
             case "a":
+                name = ""
+                position = ""
+
+                while True:
+                    Color.clear()
+                    Color.clear()
+
+                    Color.output(
+                        f"{Color.bold + Color.hexbg('#000000') + Color.hextext('#ffffff')}Add employee:{Color.hexOFF + Color.boldOFF} \n "
+                    )
+
+                    starttextforlen = f"|{center('Number', 'number')}|{center('Name', 'name')}|Position       |"
+                    starttext = f"|{Color.bold}{center('Number', 'number')}{Color.boldOFF}|{Color.bold}{center('Name', 'name')}{Color.boldOFF}|{Color.bold}{center('Position', 'position')}{Color.boldOFF}|"
+
+                    Color.output(
+                        f"{Color.bold}{'New employee'.center(len(starttextforlen))}{Color.boldOFF}"
+                    )
+                    Color.output("-" * len(starttextforlen))
+                    Color.output(starttext)
+                    Color.output("-" * len(starttextforlen))
+                    Color.output(
+                        f"|{center((len(employeesData) + 1), 'number')}|{center(name if name else '????? ??????', 'name')}|{center(position if position else '??????', 'position')}|"
+                    )
+                    Color.output("\n")
+
+                    Color.output(errormessage + "\n" if errormessage else "\n")
+                    errormessage = ""
+
+                    if name:
+                        Color.output(f"Enter employee name:   {name}")
+
+                    if not name:
+                        name = Color.input("Enter employee name:   ")
+                    elif not position:
+                        position = Color.input(
+                            "Which position does this employee have? [1]-Manager, [2]-Barista, [3]-Cleaner:  "
+                        )
+
+                        match position:
+                            case "1":
+                                position = "Manager"
+                            case "2":
+                                position = "Barista"
+                            case "3":
+                                position = "Cleaner"
+                            case _:
+                                position = ""
+                                errormessage = f"{Color.warning}Please select one of the options; [1]-Manager, [2]-Barista, [3]-Cleaner{Color.warningOFF}"
+
+                    if name and position:
+                        newemployee = dict(
+                            name=name,
+                            position=position,
+                            hoursperday=[0, 0, 0, 0, 0, 0, 0],
+                        )
+                        employeesData.append(newemployee)
+
+                        syncdata()
+
+                        break
+
                 action = "continue"
-
-                name = input("Enter Name")
-                position = input("Enter position")
-
-                newemployee = dict(
-                    name=name, position=position, hoursperday=[0, 0, 0, 0, 0, 0, 0]
-                )
-
-                employeesData.append(newemployee)
-
-                action = "continue"
-
                 continue
 
             case "exit":
