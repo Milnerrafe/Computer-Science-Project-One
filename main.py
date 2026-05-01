@@ -71,36 +71,81 @@ def function2(number):
     return "back"
 
 
+def center(string, type):
+    match type:
+        case "number":
+            text = str(string)
+            return text.center(14)
+        case "name":
+            bigest = 0
+            for employee in employeesData:
+                if len(str(employee["name"])) > bigest:
+                    bigest = len(str(employee["name"]))
+
+            if bigest == 0:
+                bigest = 10
+
+            text = str(string)
+            return text.center(bigest + 6)
+
+        case "position":
+            bigest = 0
+            for employee in employeesData:
+                if len(str(employee["position"])) > bigest:
+                    bigest = len(str(employee["position"]))
+
+            if bigest == 0:
+                bigest = 10
+
+            text = str(string)
+            return text.center(bigest + 8)
+
+
+def tableview(type="normal", selectnumber=0, colorvar="none", name="", position=""):
+    global employeesData
+    syncdata()
+
+    starttextforlen = f"|{center('Number', 'number')}|{center('Name', 'name')}|{center('Position', 'position')}|"
+    starttext = f"|{Color.bold}{center('Number', 'number')}{Color.boldOFF}|{Color.bold}{center('Name', 'name')}{Color.boldOFF}|{Color.bold}{center('Position', 'position')}{Color.boldOFF}|"
+
+    Color.output(starttext)
+    Color.output("-" * len(starttextforlen))
+
+    colors = ["important", "information", "success", "warning", "error"]
+
+    if colorvar in colors:
+        colorvarOFF = colorvar + "OFF"
+    else:
+        colorvar = "bold"
+        colorvarOFF = colorvar + "OFF"
+
+    syncdata()
+    if type == "normal":
+        for index, employee in enumerate(employeesData):
+            Color.output(
+                f"|{center(index, 'number')}|{center(employee['name'], 'name')}|{center(employee['position'], 'position')}|"
+            )
+            Color.output("-" * len(starttextforlen))
+    elif type == "select":
+        for index, employee in enumerate(employeesData):
+            if index == selectnumber:
+                Color.output(
+                    f"{getattr(Color, colorvar)}|{center(index, 'number')}|{center(employee['name'], 'name')}|{center(employee['position'], 'position')}|{getattr(Color, colorvarOFF)}"
+                )
+            else:
+                Color.output(
+                    f"|{center(index, 'number')}|{center(employee['name'], 'name')}|{center(employee['position'], 'position')}|"
+                )
+            Color.output("-" * len(starttextforlen))
+    elif type == "newuser":
+        Color.output(
+            f"|{center((len(employeesData) + 1), 'number')}|{center(name if name else '????? ??????', 'name')}|{center(position if position else '??????', 'position')}|"
+        )
+
+    syncdata()
+
+
 def function5(number):
-    def center(string, type):
-        match type:
-            case "number":
-                text = str(string)
-                return text.center(14)
-            case "name":
-                bigest = 0
-                for employee in employeesData:
-                    if len(str(employee["name"])) > bigest:
-                        bigest = len(str(employee["name"]))
-
-                if bigest == 0:
-                    bigest = 10
-
-                text = str(string)
-                return text.center(bigest + 6)
-
-            case "position":
-                bigest = 0
-                for employee in employeesData:
-                    if len(str(employee["position"])) > bigest:
-                        bigest = len(str(employee["position"]))
-
-                if bigest == 0:
-                    bigest = 10
-
-                text = str(string)
-                return text.center(bigest + 8)
-
     shouldExit = False
     action = "continue"
     errormessage = ""
@@ -115,19 +160,13 @@ def function5(number):
                     f"{Color.bold + Color.hexbg('#000000') + Color.hextext('#ffffff')}Manage employees:{Color.hexOFF + Color.boldOFF} \n  "
                 )
 
-                starttext = f"|{Color.bold}{center('Number', 'number')}{Color.boldOFF}|{Color.bold}{center('Name', 'name')}{Color.boldOFF}|{Color.bold}{center('Position', 'position')}{Color.boldOFF}|"
-                starttextforlen = f"|{center('Number', 'number')}|{center('Name', 'name')}|{center('Position', 'position')}|"
-
-                Color.output(starttext)
-                Color.output("-" * len(starttextforlen))
-
-                syncdata()
-                for index, employee in enumerate(employeesData):
-                    Color.output(
-                        f"|{center(index, 'number')}|{center(employee['name'], 'name')}|{center(employee['position'], 'position')}|"
-                    )
-                    Color.output("-" * len(starttextforlen))
-                syncdata()
+                tableview(
+                    type="normal",
+                    selectnumber=0,
+                    colorvar="none",
+                    name="",
+                    position="",
+                )
 
                 Color.output(errormessage if errormessage else "\n")
                 errormessage = ""
@@ -151,19 +190,13 @@ def function5(number):
 
                     Color.output(f"{Color.warning}Edit employee:{Color.warningOFF} \n ")
 
-                    starttext = f"|{Color.bold}{center('Number', 'number')}{Color.boldOFF}|{Color.bold}{center('Name', 'name')}{Color.boldOFF}|{Color.bold}{center('Position', 'position')}{Color.boldOFF}|"
-                    starttextforlen = f"|{center('Number', 'number')}|{center('Name', 'name')}|{center('Position', 'position')}|"
-
-                    Color.output(starttext)
-                    Color.output("-" * len(starttextforlen))
-
-                    syncdata()
-                    for index, employee in enumerate(employeesData):
-                        Color.output(
-                            f"|{center(index, 'number')}|{center(employee['name'], 'name')}|{center(employee['position'], 'position')}|"
-                        )
-                        Color.output("-" * len(starttextforlen))
-                    syncdata()
+                    tableview(
+                        type="normal",
+                        selectnumber=0,
+                        colorvar="none",
+                        name="",
+                        position="",
+                    )
 
                     Color.output("\n")
 
@@ -197,24 +230,13 @@ def function5(number):
                                 f"{Color.warning}Edit employee:{Color.warningOFF} \n "
                             )
 
-                            starttext = f"|{Color.bold}{center('Number', 'number')}{Color.boldOFF}|{Color.bold}{center('Name', 'name')}{Color.boldOFF}|{Color.bold}{center('Position', 'position')}{Color.boldOFF}|"
-                            starttextforlen = f"|{center('Number', 'number')}|{center('Name', 'name')}|{center('Position', 'position')}|"
-
-                            Color.output(starttext)
-                            Color.output("-" * len(starttextforlen))
-
-                            syncdata()
-                            for index, employee in enumerate(employeesData):
-                                if index == delnumber:
-                                    Color.output(
-                                        f"{Color.warning}|{center(index, 'number')}|{center(employee['name'], 'name')}|{center(employee['position'], 'position')}|{Color.warningOFF}"
-                                    )
-                                else:
-                                    Color.output(
-                                        f"|{center(index, 'number')}|{center(employee['name'], 'name')}|{center(employee['position'], 'position')}|"
-                                    )
-                                Color.output("-" * len(starttextforlen))
-                            syncdata()
+                            tableview(
+                                type="select",
+                                selectnumber=delnumber,
+                                colorvar="warning",
+                                name="",
+                                position="",
+                            )
 
                             Color.output(errormessage + "\n" if errormessage else "\n")
                             errormessage = ""
@@ -292,19 +314,13 @@ def function5(number):
 
                     Color.output(f"{Color.error}Delete employee:{Color.errorOFF} \n ")
 
-                    starttext = f"|{Color.bold}{center('Number', 'number')}{Color.boldOFF}|{Color.bold}{center('Name', 'name')}{Color.boldOFF}|{Color.bold}{center('Position', 'position')}{Color.boldOFF}|"
-                    starttextforlen = f"|{center('Number', 'number')}|{center('Name', 'name')}|{center('Position', 'position')}|"
-
-                    Color.output(starttext)
-                    Color.output("-" * len(starttextforlen))
-
-                    syncdata()
-                    for index, employee in enumerate(employeesData):
-                        Color.output(
-                            f"|{center(index, 'number')}|{center(employee['name'], 'name')}|{center(employee['position'], 'position')}|"
-                        )
-                        Color.output("-" * len(starttextforlen))
-                    syncdata()
+                    tableview(
+                        type="normal",
+                        selectnumber=0,
+                        colorvar="none",
+                        name="",
+                        position="",
+                    )
 
                     Color.output("\n")
 
@@ -337,24 +353,13 @@ def function5(number):
                                 f"{Color.error}Delete employee:{Color.errorOFF} \n "
                             )
 
-                            starttext = f"|{Color.bold}{center('Number', 'number')}{Color.boldOFF}|{Color.bold}{center('Name', 'name')}{Color.boldOFF}|{Color.bold}{center('Position', 'position')}{Color.boldOFF}|"
-                            starttextforlen = f"|{center('Number', 'number')}|{center('Name', 'name')}|Position       |"
-
-                            Color.output(starttext)
-                            Color.output("-" * len(starttextforlen))
-
-                            syncdata()
-                            for index, employee in enumerate(employeesData):
-                                if index == delnumber:
-                                    Color.output(
-                                        f"{Color.error}|{center(index, 'number')}|{center(employee['name'], 'name')}|{center(employee['position'], 'position')}|{Color.errorOFF}"
-                                    )
-                                else:
-                                    Color.output(
-                                        f"|{center(index, 'number')}|{center(employee['name'], 'name')}|{center(employee['position'], 'position')}|"
-                                    )
-                                Color.output("-" * len(starttextforlen))
-                            syncdata()
+                            tableview(
+                                type="select",
+                                selectnumber=delnumber,
+                                colorvar="error",
+                                name="",
+                                position="",
+                            )
 
                             Color.output(errormessage + "\n" if errormessage else "\n")
                             errormessage = ""
@@ -399,18 +404,14 @@ def function5(number):
                         f"{Color.bold + Color.hexbg('#000000') + Color.hextext('#ffffff')}Add employee:{Color.hexOFF + Color.boldOFF} \n "
                     )
 
-                    starttextforlen = f"|{center('Number', 'number')}|{center('Name', 'name')}|Position       |"
-                    starttext = f"|{Color.bold}{center('Number', 'number')}{Color.boldOFF}|{Color.bold}{center('Name', 'name')}{Color.boldOFF}|{Color.bold}{center('Position', 'position')}{Color.boldOFF}|"
+                    tableview(
+                        type="newuser",
+                        selectnumber=0,
+                        colorvar="",
+                        name=name if name else "",
+                        position=position if position else "",
+                    )
 
-                    Color.output(
-                        f"{Color.bold}{'New employee'.center(len(starttextforlen))}{Color.boldOFF}"
-                    )
-                    Color.output("-" * len(starttextforlen))
-                    Color.output(starttext)
-                    Color.output("-" * len(starttextforlen))
-                    Color.output(
-                        f"|{center((len(employeesData) + 1), 'number')}|{center(name if name else '????? ??????', 'name')}|{center(position if position else '??????', 'position')}|"
-                    )
                     Color.output("\n")
 
                     Color.output(errormessage + "\n" if errormessage else "\n")
