@@ -83,6 +83,9 @@ def function5(number):
                     if len(str(employee["name"])) > bigest:
                         bigest = len(str(employee["name"]))
 
+                if bigest == 0:
+                    bigest = 10
+
                 text = str(string)
                 return text.center(bigest + 6)
 
@@ -91,6 +94,9 @@ def function5(number):
                 for employee in employeesData:
                     if len(str(employee["position"])) > bigest:
                         bigest = len(str(employee["position"]))
+
+                if bigest == 0:
+                    bigest = 10
 
                 text = str(string)
                 return text.center(bigest + 8)
@@ -110,7 +116,7 @@ def function5(number):
                 )
 
                 starttext = f"|{Color.bold}{center('Number', 'number')}{Color.boldOFF}|{Color.bold}{center('Name', 'name')}{Color.boldOFF}|{Color.bold}{center('Position', 'position')}{Color.boldOFF}|"
-                starttextforlen = f"|{center('Number', 'number')}|{center('Name', 'name')}|Position       |"
+                starttextforlen = f"|{center('Number', 'number')}|{center('Name', 'name')}|{center('Position', 'position')}|"
 
                 Color.output(starttext)
                 Color.output("-" * len(starttextforlen))
@@ -146,7 +152,7 @@ def function5(number):
                     Color.output(f"{Color.warning}Edit employee:{Color.warningOFF} \n ")
 
                     starttext = f"|{Color.bold}{center('Number', 'number')}{Color.boldOFF}|{Color.bold}{center('Name', 'name')}{Color.boldOFF}|{Color.bold}{center('Position', 'position')}{Color.boldOFF}|"
-                    starttextforlen = f"|{center('Number', 'number')}|{center('Name', 'name')}|Position       |"
+                    starttextforlen = f"|{center('Number', 'number')}|{center('Name', 'name')}|{center('Position', 'position')}|"
 
                     Color.output(starttext)
                     Color.output("-" * len(starttextforlen))
@@ -192,7 +198,7 @@ def function5(number):
                             )
 
                             starttext = f"|{Color.bold}{center('Number', 'number')}{Color.boldOFF}|{Color.bold}{center('Name', 'name')}{Color.boldOFF}|{Color.bold}{center('Position', 'position')}{Color.boldOFF}|"
-                            starttextforlen = f"|{center('Number', 'number')}|{center('Name', 'name')}|Position       |"
+                            starttextforlen = f"|{center('Number', 'number')}|{center('Name', 'name')}|{center('Position', 'position')}|"
 
                             Color.output(starttext)
                             Color.output("-" * len(starttextforlen))
@@ -287,7 +293,7 @@ def function5(number):
                     Color.output(f"{Color.error}Delete employee:{Color.errorOFF} \n ")
 
                     starttext = f"|{Color.bold}{center('Number', 'number')}{Color.boldOFF}|{Color.bold}{center('Name', 'name')}{Color.boldOFF}|{Color.bold}{center('Position', 'position')}{Color.boldOFF}|"
-                    starttextforlen = f"|{center('Number', 'number')}|{center('Name', 'name')}|Position       |"
+                    starttextforlen = f"|{center('Number', 'number')}|{center('Name', 'name')}|{center('Position', 'position')}|"
 
                     Color.output(starttext)
                     Color.output("-" * len(starttextforlen))
