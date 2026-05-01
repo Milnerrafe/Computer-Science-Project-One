@@ -162,10 +162,6 @@ def function5(number):
 
                 tableview(
                     type="normal",
-                    selectnumber=0,
-                    colorvar="none",
-                    name="",
-                    position="",
                 )
 
                 Color.output(errormessage if errormessage else "\n")
@@ -192,10 +188,6 @@ def function5(number):
 
                     tableview(
                         type="normal",
-                        selectnumber=0,
-                        colorvar="none",
-                        name="",
-                        position="",
                     )
 
                     Color.output("\n")
@@ -234,8 +226,6 @@ def function5(number):
                                 type="select",
                                 selectnumber=delnumber,
                                 colorvar="warning",
-                                name="",
-                                position="",
                             )
 
                             Color.output(errormessage + "\n" if errormessage else "\n")
@@ -316,10 +306,6 @@ def function5(number):
 
                     tableview(
                         type="normal",
-                        selectnumber=0,
-                        colorvar="none",
-                        name="",
-                        position="",
                     )
 
                     Color.output("\n")
@@ -357,8 +343,6 @@ def function5(number):
                                 type="select",
                                 selectnumber=delnumber,
                                 colorvar="error",
-                                name="",
-                                position="",
                             )
 
                             Color.output(errormessage + "\n" if errormessage else "\n")
@@ -406,8 +390,6 @@ def function5(number):
 
                     tableview(
                         type="newuser",
-                        selectnumber=0,
-                        colorvar="",
                         name=name if name else "",
                         position=position if position else "",
                     )
