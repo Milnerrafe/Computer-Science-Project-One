@@ -1,6 +1,9 @@
 # Import date, time for date and time related functions.
 from datetime import date
 
+# Declaration of the Array of Employees
+employeeData = []
+
 
 # Clear function
 def clear():
@@ -33,6 +36,68 @@ def clear():
             os.system("clear")
 
 
+# Function to check whether an employee exists in the data structure.
+def checkEmployee(name):
+    # IntelliSense information
+    """
+    Check whether an employee exists in the data structure
+
+    Returns:
+            boolean: True = Employee does not exist / False = employee does exist
+            int: The index of the employee
+    """
+
+    # Using iteration control structure, check whether the name provided is in the list of employees.
+    for index, employee in enumerate(employeeData):
+        # If the name is in the list of employees, return false and provide the index to that data.
+        if name == employee.name:
+            return False, index
+        else:
+            continue
+
+    # If the name is not in the data structure, return true and do not provide an index.
+    return True, None
+
+
+# Enter employee information and hours function.
+def enterEmployeehours():
+    # IntelliSense information
+    """
+    Employee information and hours function
+    """
+
+    # Define error message variable used to present error in the next iteration.
+    errormessage = ""
+
+    # Define the step that the loop is in
+    step = 0
+
+    # Define function loop
+    while True:
+        # Clear the terminal to remove the previous screen.
+        clear()
+
+        print("Enter Employee hours: \n")
+
+        # If there is an error message, print it, Otherwise, print a blank new line.
+        print(errormessage) if errormessage else print("\n")
+
+        if step == 0:
+            # Try accept expression for name input to allow for clean exiting, back to the main screen.
+            try:
+                name = input(
+                    "What is the name of the employee you would like to add:   "
+                )
+            except KeyboardInterrupt:
+                clear()
+                break
+
+            if checkEmployee(name):
+                print("yes")
+            else:
+                print("no")
+
+
 # Main function (The main function controls the selection of which function
 # the user would like to run and has looping functions to allow the user
 # to perform multiple tasks.)
@@ -48,6 +113,7 @@ def main():
     # broken by using the break keyword. This means that a set variable
     # is not required.)
 
+    # Define error message variable used to present error in the next iteration.
     errormessage = ""
 
     while True:
@@ -64,8 +130,8 @@ def main():
 Today is {date.today().strftime("%A") + " the " + date.today().strftime("%d") + " of " + date.today().strftime("%B, %Y")}
 
 What function would you like to perform?
-(1) - Enter employee hours.
-(2) - View employee hours and pay.
+(1) - Enter employee hours
+(2) - View employee hours and pay
 (3) - Exit
 
 {errormessage}
@@ -80,14 +146,21 @@ Enter the function number and press enter to continue: """)
 
         # Handle Control + C and cleanly close the program with no errors.
         except KeyboardInterrupt:
+            clear()
             break
 
         # Selection control structure to run the correct function for 1, 2, 3
         #  and to inform the user of an error if they choose a different number.
         if functionnumber == 1:
-            print(1)
+            # Run enter employee hours, Then restart the loop when the function returns to
+            # allow the user to use other functions.
+            enterEmployeehours()
+            continue
         elif functionnumber == 2:
-            print(3)
+            # Run View employee data, Then restart the loop when the function returns to
+            # allow the user to use other functions.
+            viewEmployeedata()
+            continue
         elif functionnumber == 3:
             clear()
             break

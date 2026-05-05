@@ -1,0 +1,43 @@
+FUNCTION Main
+    errormessage = ""
+
+    WHILE TRUE:
+        CLEAROUTPUT()
+
+        functionnumber = int(
+        input( /START multiline templating string/
+
+        Welcome to Mushroom Cafe Payroll Management:
+
+        Today is {TODAYSDATE()}
+
+        What function would you like to perform?
+        (1) - Enter employee hours.
+        (2) - View employee hours and pay.
+        (3) - Exit
+
+        {errormessage}
+
+        Enter the function number and press enter to continue: /END multiline templating string/)
+        )
+        CATCH ValueError
+            errormessage = "Please enter the number of the function you would like to perform 1, 2 or 3"
+            CONTINUE
+        END CATCH
+
+        CATCH KeyboardInterrupt
+            CLEAROUTPUT()
+            EXIT
+        END CATCH
+
+        IF functionnumber == 1
+            function1()
+        ELIF functionnumber == 2
+            function2()
+        ELIF functionnumber == 3
+            CLEAROUTPUT()
+            EXIT
+        ELSE
+            errormessage = "Please enter the number of the function you would like to perform 1, 2 or 3"
+            continue
+        END IF
