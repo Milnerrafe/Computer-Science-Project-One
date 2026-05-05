@@ -67,8 +67,144 @@ def function1(number):
 
 
 def function2(number):
-    print(number)
-    return "back"
+    shouldExit = False
+    action = "continue"
+    errormessage = ""
+
+    while not shouldExit:
+        Color.clear()
+        Color.clear()
+        match action.lower():
+            case "continue":
+                errormessage = ""
+
+                while True:
+                    Color.clear()
+                    Color.clear()
+
+                    Color.output(
+                        f"{Color.information}Enter Hours:{Color.informationOFF} \n "
+                    )
+
+                    tableview(
+                        type="normal",
+                    )
+
+                    Color.output("\n")
+
+                    Color.output(errormessage + "\n" if errormessage else "\n")
+                    errormessage = ""
+
+                    delninput = Color.input(
+                        "Enter the number of the employee you wish to input hours for or press [b] to go back:  "
+                    )
+
+                    if delninput == "b":
+                        action = "h"
+                        break
+                    else:
+                        try:
+                            delnumber = int(delninput)
+                        except ValueError:
+                            errormessage = f"{Color.warning}Please enter a number or press [b] to go back{Color.warningOFF}"
+                            continue
+
+                    if delnumber in range(len(employeesData)):
+                        externalContinue = False
+                        externalBreak = False
+                        name = ""
+
+                        while True:
+                            Color.clear()
+                            Color.clear()
+
+                            Color.output(
+                                f"{Color.warning}Edit employee:{Color.warningOFF} \n "
+                            )
+
+                            tableview(
+                                type="select",
+                                selectnumber=delnumber,
+                                colorvar="warning",
+                            )
+
+                            Color.output(errormessage + "\n" if errormessage else "\n")
+                            errormessage = ""
+
+                            if not name:
+                                confirm = Color.input(
+                                    f"Edit Name for, {Color.warning}{employeesData[delnumber]['name']}{Color.warningOFF}; [Y]es, [N]o:  "
+                                )
+
+                                if confirm.lower() == "y":
+                                    name = Color.input("Enter New Name:   ")
+                                    employeesData[delnumber]["name"] = name
+                                    syncdata()
+                                elif confirm.lower() == "n":
+                                    name = "n"
+                                else:
+                                    errormessage = f"{Color.warning}Please select yes or no{Color.warningOFF}"
+                                    continue
+                            else:
+                                if name != "n":
+                                    Color.output(f"New Name:   {name}\n")
+
+                                confirm = Color.input(
+                                    f"Edit Position for, {Color.warning}{employeesData[delnumber]['name']}{Color.warningOFF}; [Y]es, [N]o:  "
+                                )
+
+                                if confirm.lower() == "y":
+                                    position = Color.input(
+                                        "Which position does this employee have? [1]-Manager, [2]-Barista, [3]-Cleaner:  "
+                                    )
+
+                                    match position:
+                                        case "1":
+                                            position = "Manager"
+                                        case "2":
+                                            position = "Barista"
+                                        case "3":
+                                            position = "Cleaner"
+                                        case _:
+                                            position = ""
+                                            errormessage = f"{Color.warning}Please select one of the options; [1]-Manager, [2]-Barista, [3]-Cleaner{Color.warningOFF}"
+                                            continue
+
+                                    employeesData[delnumber]["position"] = position
+                                    syncdata()
+
+                                    externalBreak = True
+                                    break
+                                elif confirm.lower() == "n":
+                                    name = "n"
+                                    externalBreak = True
+                                    break
+                                else:
+                                    errormessage = f"{Color.warning}Please select yes or no{Color.warningOFF}"
+                                    continue
+
+                        if externalContinue:
+                            continue
+                        if externalBreak:
+                            action = "continue"
+                            break
+
+                    else:
+                        errormessage = f"{Color.warning}Please enter an employee number from the list{Color.warningOFF}"
+
+                action = "continue"
+                continue
+
+            case "h":
+                return "back"
+
+            case "exit":
+                return "exit"
+
+            case _:
+                errormessage = f'{Color.warning}Please enter one of the commands below or type "exit" at anytime to quit the program.{Color.warningOFF} \n'
+                action = "continue"
+                continue
 
 
 def center(string, type):
