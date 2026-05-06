@@ -2,21 +2,7 @@
 from datetime import date
 
 # Declaration of the Array of Employees
-employeeData = [
-    {
-        "name": "Meg Docherty",
-        "position": "Manager",
-        "hoursperday": [1, 3, 9, 10, 11, 2, 1],
-    },
-    {
-        "name": "test",
-        "position": "Barista",
-        "hoursperday": [9.0, 9.0, 9.0, 0.0, 9.0, 6.0, 10.0],
-        "holidays": [False, False, False, False, False, False, False],
-        "payperday": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
-        "totalpay": 0.0,
-    },
-]
+employeeData = []
 
 
 # Clear function
@@ -149,17 +135,26 @@ def viewEmployeedata(index=-1):
         else:
             print("Employees: \n")
 
+            # Define variable to determine if there are any names in the data structure.
+            anynames = 0
+
             for name in names:
                 print(name)
+                anynames += 1
+
+            if anynames == 0:
+                nameInputstring = "No employees have been added. Please press [b] to return home and add employees:  "
+            else:
+                nameInputstring = (
+                    "What is the name of the employee you would like to view:   "
+                )
 
             # New line to separate information and provide a clearer user interface.
             print("\n")
 
             # Try except expression for name input to allow for clean exiting, back to the main screen.
             try:
-                nameInput = input(
-                    "What is the name of the employee you would like to view:   "
-                )
+                nameInput = input(nameInputstring)
             except KeyboardInterrupt:
                 clear()
                 break
