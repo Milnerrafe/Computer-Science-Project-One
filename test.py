@@ -1,11 +1,11 @@
 employeeData = [
     {
-        "name": "Rosa Lina",
-        "position": "Manager",
-        "hoursperday": [4.0, 4.0, 4.0, 4.0, 14.0, 0.0, 12.0],
+        "name": "test",
+        "position": "Barista",
+        "hoursperday": [9.0, 9.0, 9.0, 0.0, 9.0, 6.0, 10.0],
         "holidays": [False, False, False, False, False, False, False],
-        "payperday": [120.0, 120.0, 120.0, 120.0, 469.5, 0.0, 459.0],
-        "totalpay": 1408.5,
+        "payperday": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+        "totalpay": 0.0,
     },
 ]
 
@@ -63,65 +63,39 @@ for dayNumber, day in enumerate(days):
 
         # And the total pay for the weekly period is then calculated by summing that array.
         totalpay = sum(employeeData[index]["payperday"])
+        print(totalpay)
         employeeData[index]["totalpay"] = totalpay
     else:
         # If the employee has worked more than 9 hours,
         # then we subtract 9 hours from the hours worked and calculate
         # those 9 hours at the normal pay rate for them.
         hoursworked = employeeData[index]["hoursperday"][dayNumber]
-        print("0")
-        print(dayNumber)
-        print(pay)
-        print(hoursworked)
+
         hoursworked = hoursworked - 9
         pay = 9 * payrate
 
-        print("1")
-        print(dayNumber)
-        print(pay)
-        print(hoursworked)
-
         # If the employee has worked more than three hours, putting them in the higher band of overtime, then;
         if hoursworked > 3:
-            print("2")
-            print(dayNumber)
-            print(pay)
-            print(hoursworked)
             # We first remove the three hours from the hours worked and then calculate those three hours at their pay rate,
             # then increase it by the overtime amount.
             hoursworked = hoursworked - 3
             pay += (3 * payrate) * float(f"1.{int(overtime1)}")
-            print("3")
-            print(dayNumber)
-            print(pay)
-            print(hoursworked)
 
             # Finally, the remaining hours are multiplied by the pay rate and then multiplied by
             # the higher overtime rate.
             pay += (hoursworked * payrate) * float(f"1.{int(overtime2)}")
-            print(float(f"1.{int(overtime2)}"))
-            print("4")
-            print(dayNumber)
-            print(pay)
-            print(hoursworked)
+
         else:
-            print("5")
-            print(dayNumber)
-            print(pay)
-            print(hoursworked)
             # If the employee has not worked enough hours to go into the higher band of overtime,
             # then the amount of hours they worked is times by their pay rate and increased by the lower overtime rate.
             pay += (hoursworked * payrate) * float(f"1.{int(overtime1)}")
-            print("6")
-            print(dayNumber)
-            print(pay)
-            print(hoursworked)
 
         # The data is then saved into the array value for that day.
         employeeData[index]["payperday"][dayNumber] = pay
 
         # And the total pay for the weekly period is then calculated by summing that array.
         totalpay = sum(employeeData[index]["payperday"])
+        print(totalpay)
         employeeData[index]["totalpay"] = totalpay
 
 

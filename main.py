@@ -7,7 +7,15 @@ employeeData = [
         "name": "Meg Docherty",
         "position": "Manager",
         "hoursperday": [1, 3, 9, 10, 11, 2, 1],
-    }
+    },
+    {
+        "name": "test",
+        "position": "Barista",
+        "hoursperday": [9.0, 9.0, 9.0, 0.0, 9.0, 6.0, 10.0],
+        "holidays": [False, False, False, False, False, False, False],
+        "payperday": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+        "totalpay": 0.0,
+    },
 ]
 
 
@@ -42,8 +50,135 @@ def clear():
             os.system("clear")
 
 
-def viewEmployeedata():
-    print("hi")
+# Function to find and show employee information.
+def viewEmployeedata(index=-1):
+    """
+    Show employee information
+
+    Args:
+            index (int): The employees index in the data structure.
+    """
+
+    # Define names array.
+    names = []
+
+    # Get a list of all employee names to show to the user.
+    for employee in employeeData:
+        names.append(employee["name"])
+
+    # Define error message variable used to present error in the next iteration.
+    errormessage = ""
+
+    # Define function loop
+    while True:
+        # Clear the terminal to remove the previous screen.
+        clear()
+
+        print("View employee information: \n")
+
+        if errormessage:
+            print(errormessage + "\n")
+            errormessage = ""
+
+        # Identify whether the function is being called with an index and should print the employee or whether the input process is needed.
+        if 0 <= index < len(employeeData):
+            employee = employeeData[index]
+
+            # To ensure pay data has been calculated, the payment calculation function is rerun.
+            calculateemployeepay(index)
+
+            print(f"Employee: {employee['name']}")
+            print(f"Has worked a total of {sum(employee['hoursperday'])} hours\n")
+
+            days = [
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saturday",
+                "Sunday",
+            ]
+
+            # Print out pay for each day.
+            for dayNumber, day in enumerate(days):
+                print(
+                    f"On {day}, they worked, {employee['hoursperday'][dayNumber]} hours and earned, ${employee['payperday'][dayNumber]}"
+                )
+
+            # Print total pay.
+            print(
+                f"\nIn total, {employee['name']}, should be payed, ${employee['totalpay']}, this week."
+            )
+
+            # Calculate on which day the employee worked the most
+            mosthoursday = "", -1
+            mosthoursworkedsofar = 0
+
+            for dayNumber, day in enumerate(days):
+                hoursworked = employee["hoursperday"][dayNumber]
+
+                if hoursworked > mosthoursworkedsofar:
+                    mosthoursday = day, dayNumber
+
+            print(
+                f"They, worked the most on {mosthoursday[0]} at {employee['hoursperday'][mosthoursday[1]]} hours\n"
+            )
+
+            # Try except expression for name input to allow for clean exiting, back to the main screen.
+            try:
+                nextstepInput = input(
+                    "View a different employee or return home, Press [b] for Home or Press [a] for a different employee:  "
+                )
+            except KeyboardInterrupt:
+                clear()
+                break
+
+            # Check if the user would like to return to the homepage.
+
+            if nextstepInput.lower() == "b":
+                clear()
+                break
+            elif nextstepInput.lower() == "a":
+                index = -1
+                continue
+            else:
+                errormessage = "Please press [b] or [a]"
+                continue
+
+        else:
+            print("Employees: \n")
+
+            for name in names:
+                print(name)
+
+            # New line to separate information and provide a clearer user interface.
+            print("\n")
+
+            # Try except expression for name input to allow for clean exiting, back to the main screen.
+            try:
+                nameInput = input(
+                    "What is the name of the employee you would like to view:   "
+                )
+            except KeyboardInterrupt:
+                clear()
+                break
+
+            # Check if the user would like to return to the homepage.
+
+            if nameInput.lower() == "b":
+                clear()
+                break
+
+            # Check if the employee exists.
+            employeeExists, indexOfemployee = checkEmployee(nameInput)
+
+            if employeeExists:
+                index = indexOfemployee
+                continue
+            else:
+                errormessage = "Sorry, that employee doesn't exist"
+                continue
 
 
 # Function to check whether an employee exists in the data structure.
@@ -68,6 +203,101 @@ def checkEmployee(name):
 
     # If the name is not in the data structure, return true and do not provide an index.
     return False, None
+
+
+# Function to check calculate the employee's pay based on their index in the data structure.
+def calculateemployeepay(index):
+    # IntelliSense information
+    """
+    Calculate an employee's pay based on their index and the data structure.
+
+    Args:
+            index (int): The employees index in the data structure.
+    """
+
+    days = [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday",
+    ]
+
+    for dayNumber, day in enumerate(days):
+        # Define pay variable
+        pay = 0.0
+
+        # Based on the employee's position define pay rate.
+        if employeeData[index]["position"] == "Manager":
+            payrate = 30.0
+        else:
+            payrate = 23.0
+
+        # Define overtime rates.
+        overtime1 = 25.0
+        overtime2 = 45.0
+
+        # Change overtime and pay rates for weekends.
+        # If it is the weekend or a holiday, Change overtime to 50% and change pay rate.
+        if (
+            day == "Sunday"
+            or employeeData[index]["holidays"][dayNumber]
+            or day == "Saturday"
+        ):
+            # If it is a holiday or Sunday, set the pay rate to 4.
+            # If it's not, which would be Saturday, set it to 3.
+            payrate += (
+                4
+                if day == "Sunday" or employeeData[index]["holidays"][dayNumber]
+                else 3
+            )
+            # Set overtime to weekend holiday values.
+            overtime1 = 50.0
+            overtime2 = 50.0
+
+        # If the employee has worked less than the overtime threshold on that day;
+        if employeeData[index]["hoursperday"][dayNumber] <= 9.0:
+            # Then their hours worked is simply multiplied by the pay rate,
+            # which has already been adjusted to include the weekend and holiday benefits.
+            pay = employeeData[index]["hoursperday"][dayNumber] * payrate
+
+            # The data is then saved into the array value for that day.
+            employeeData[index]["payperday"][dayNumber] = pay
+
+            # And the total pay for the weekly period is then calculated by summing that array.
+            totalpay = sum(employeeData[index]["payperday"])
+            employeeData[index]["totalpay"] = totalpay
+        else:
+            # If the employee has worked more than 9 hours,
+            # then we subtract 9 hours from the hours worked and calculate
+            # those 9 hours at the normal pay rate for them.
+            hoursworked = employeeData[index]["hoursperday"][dayNumber]
+            hoursworked = hoursworked - 9
+            pay = 9 * payrate
+
+            # If the employee has worked more than three hours, putting them in the higher band of overtime, then;
+            if hoursworked > 3:
+                # We first remove the three hours from the hours worked and then calculate those three hours at their pay rate,
+                # then increase it by the overtime amount.
+                hoursworked = hoursworked - 3
+                pay += (3 * payrate) * float(f"1.{int(overtime1)}")
+
+                # Finally, the remaining hours are multiplied by the pay rate and then multiplied by
+                # the higher overtime rate.
+                pay += (hoursworked * payrate) * float(f"1.{int(overtime2)}")
+            else:
+                # If the employee has not worked enough hours to go into the higher band of overtime,
+                # then the amount of hours they worked is times by their pay rate and increased by the lower overtime rate.
+                pay += (hoursworked * payrate) * float(f"1.{int(overtime1)}")
+
+            # The data is then saved into the array value for that day.
+            employeeData[index]["payperday"][dayNumber] = pay
+
+            # And the total pay for the weekly period is then calculated by summing that array.
+            totalpay = sum(employeeData[index]["payperday"])
+            employeeData[index]["totalpay"] = totalpay
 
 
 # Enter employee information and hours function.
@@ -108,7 +338,7 @@ def enterEmployeehours():
                 print(errormessage + "\n")
                 errormessage = ""
 
-            # Try accept expression for name input to allow for clean exiting, back to the main screen.
+            # Try except expression for name input to allow for clean exiting, back to the main screen.
             try:
                 nameInput = input(
                     "What is the name of the employee you would like to add:   "
@@ -208,9 +438,7 @@ def enterEmployeehours():
                     try:
                         hoursworked = float(input(inputString))
                     except ValueError:
-                        internalErrormessage = (
-                            "Please enter a number between 0 and 24 +"
-                        )
+                        internalErrormessage = "Please enter a number between 0 and 24"
                         continue
 
                     # Check whether the input is in range.
@@ -243,100 +471,9 @@ def enterEmployeehours():
                     break
 
             if step == 3:
-                days = [
-                    "Monday",
-                    "Tuesday",
-                    "Wednesday",
-                    "Thursday",
-                    "Friday",
-                    "Saturday",
-                    "Sunday",
-                ]
-
-                for dayNumber, day in enumerate(days):
-                    # Define pay variable
-                    pay = 0.0
-
-                    # Based on the employee's position define pay rate.
-                    if employeeData[index]["position"] == "Manager":
-                        payrate = 30.0
-                    else:
-                        payrate = 23.0
-
-                    # Define overtime rates.
-                    overtime1 = 25.0
-                    overtime2 = 45.0
-
-                    # Change overtime and pay rates for weekends.
-                    # If it is the weekend or a holiday, Change overtime to 50% and change pay rate.
-                    if (
-                        day == "Sunday"
-                        or employeeData[index]["holidays"][dayNumber]
-                        or day == "Saturday"
-                    ):
-                        # If it is a holiday or Sunday, set the pay rate to 4.
-                        # If it's not, which would be Saturday, set it to 3.
-                        payrate += (
-                            4
-                            if day == "Sunday"
-                            or employeeData[index]["holidays"][dayNumber]
-                            else 3
-                        )
-                        # Set overtime to weekend holiday values.
-                        overtime1 = 50.0
-                        overtime2 = 50.0
-
-                    # If the employee has worked less than the overtime threshold on that day;
-                    if employeeData[index]["hoursperday"][dayNumber] <= 9.0:
-                        # Then their hours worked is simply multiplied by the pay rate,
-                        # which has already been adjusted to include the weekend and holiday benefits.
-                        pay = employeeData[index]["hoursperday"][dayNumber] * payrate
-
-                        # The data is then saved into the array value for that day.
-                        employeeData[index]["payperday"][dayNumber] = pay
-
-                        # And the total pay for the weekly period is then calculated by summing that array.
-                        totalpay = sum(employeeData[index]["payperday"])
-                        employeeData[index]["totalpay"] = totalpay
-                    else:
-                        # If the employee has worked more than 9 hours,
-                        # then we subtract 9 hours from the hours worked and calculate
-                        # those 9 hours at the normal pay rate for them.
-                        hoursworked = employeeData[index]["hoursperday"][dayNumber]
-                        hoursworked = hoursworked - 9
-                        pay = 9 * payrate
-
-                        # If the employee has worked more than three hours, putting them in the higher band of overtime, then;
-                        if hoursworked > 3:
-                            # We first remove the three hours from the hours worked and then calculate those three hours at their pay rate,
-                            # then increase it by the overtime amount.
-                            hoursworked = hoursworked - 3
-                            pay += (3 * payrate) * float(f"1.{int(overtime1)}")
-
-                            # Finally, the remaining hours are multiplied by the pay rate and then multiplied by
-                            # the higher overtime rate.
-                            pay += (hoursworked * payrate) * float(
-                                f"1.{int(overtime2)}"
-                            )
-                        else:
-                            # If the employee has not worked enough hours to go into the higher band of overtime,
-                            # then the amount of hours they worked is times by their pay rate and increased by the lower overtime rate.
-                            pay += (hoursworked * payrate) * float(
-                                f"1.{int(overtime1)}"
-                            )
-
-                        # The data is then saved into the array value for that day.
-                        employeeData[index]["payperday"][dayNumber] = pay
-
-                        # And the total pay for the weekly period is then calculated by summing that array.
-                        totalpay = sum(employeeData[index]["payperday"])
-                        employeeData[index]["totalpay"] = totalpay
-
+                calculateemployeepay(index)
+                viewEmployeedata(index)
             break
-
-    viewEmployeedata()
-    print(employeeData)
-    exit()
 
 
 # Main function (The main function controls the selection of which function

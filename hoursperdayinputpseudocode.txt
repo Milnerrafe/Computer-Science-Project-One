@@ -1,0 +1,53 @@
+FOR dayNumber = 0 TO days.LENGTH()
+
+day = days[dayNumber]
+internalErrormessage = ""
+
+WHILE TRUE
+    IF day == "Monday"
+        inputString = f"Enter the hours worked by {employeeData[index]['name']} for {day}:  "
+    ELSE
+        inputString = f"Enter the hours worked for {day}:  "
+    END IF
+
+    IF internalErrormessage:
+        PRINT(internalErrormessage)
+    END IF
+
+
+    hoursworked = float(input(inputString))
+        CATCH ValueError
+            internalErrormessage = (
+            "Please enter a number between 0 and 24"
+            )
+            CONTNUE-TO-NEXTLOOP-ITERATION
+        END CATCH
+
+    IF hoursworked < 0.0 or hoursworked > 24.0
+        internalErrormessage = "Please enter a number between 0 and 24"
+        CONTNUE-TO-NEXTLOOP-ITERATION
+    ELSE
+        employeeData[index]["hoursperday"][dayNumber] = hoursworked
+    END IF
+
+    internalinternalErrormessage = ""
+
+    WHILE TRUE
+        IF internalinternalErrormessage
+            PRINT(internalinternalErrormessage)
+        END IF
+
+        holdayInput = input(f"Is {day}, a holday? [Y]es/[N]o:  ")
+
+        IF holdayInput.lower() == "yes" or holdayInput.lower() == "y"
+            employeeData[index]["holidays"][dayNumber] = TRUE
+            BREAK
+        ELIF holdayInput.lower() == "no" or holdayInput.lower() == "n":
+            BREAK
+        ELSE
+            internalinternalErrormessage = "Please enter yes or no"
+            CONTNUE-TO-NEXTLOOP-ITERATION
+    END WHILE
+
+END WHILE
+END FOR
